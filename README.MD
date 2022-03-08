@@ -2,7 +2,7 @@
 
 > go语言版 [pushplus推送加](https://www.pushplus.plus) 
 > 
-> [文档地址](https://www.pushplus.plus/doc/#%E5%BC%95%E8%A8%80)
+> [官方文档地址](https://www.pushplus.plus/doc/#%E5%BC%95%E8%A8%80)
 
 ## TODO
 
@@ -17,24 +17,24 @@
   * [x] 获取 token
   * [x] 个人资料详情
   * [x] 获取解封剩余时间
-* [ ] 群组接口
+* [x] 群组接口
   * [x] 群组列表
-  * [ ] 获取我加入的群组详情
-  * [ ] 新增群组
-  * [ ] 获取群组二维码
-  * [ ] 退出群组
-* [ ] 群组用户接口
-  * [ ] 获取群组内用户
-  * [ ] 删除群组内用户
-* [ ] 渠道配置接口
-  * [ ] 获取 webHook 列表
-  * [ ] 获取 webhook 详情
-  * [ ] 新增 webhook
-  * [ ] 修改 webhook
-* [ ] 功能设置接口
-  * [ ] 获取默认发送渠道
-  * [ ] 修改默认发送渠道
-  * [ ] 修改接收消息限制
+  * [x] 获取我加入的群组详情
+  * [x] 新增群组
+  * [x] 获取群组二维码
+  * [x] 退出群组
+* [x] 群组用户接口
+  * [x] 获取群组内用户
+  * [x] 删除群组内用户
+* [x] 渠道配置接口
+  * [x] 获取 webHook 列表
+  * [x] 获取 webhook 详情
+  * [x] 新增 webhook
+  * [x] 修改 webhook
+* [x] 功能设置接口
+  * [x] 获取默认发送渠道
+  * [x] 修改默认发送渠道
+  * [x] 修改接收消息限制
 
 ## 使用说明
 
@@ -53,6 +53,7 @@ if err != nil {
 }
 fmt.Println(msg)
 
+// 开放接口举例
 secretKey := "xxx"
 Client := NewClient(token, SecretKey(secretKey), DebugLog(true))
 
@@ -62,5 +63,13 @@ if err != nil {
 }
 fmt.Println(result)
 ```
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/yann0917/pushplus.svg)](https://starchart.cc/yann0917/pushplus)
+
+## License
+
+[MIT](./LICENSE) © yann0917
 
 ---

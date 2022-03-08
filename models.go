@@ -69,8 +69,8 @@ type SendMsgResultResp struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 	Data struct {
-		Status       int    `json:"status"`
-		ErrorMessage string `json:"errorMessage"`
+		Status       int    `json:"status"`       // 消息投递状态；0-未投递，1-发送中，2-已发送，3-发送失败
+		ErrorMessage string `json:"errorMessage"` // 发送失败原因
 		UpdateTime   string `json:"updateTime"`
 	} `json:"data"`
 }
@@ -138,21 +138,111 @@ type TopicDetailResp struct {
 		TopicUserCount int    `json:"topicUserCount"`
 	} `json:"data"`
 }
+
+type TopicJoinDetailResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		TopicName    string `json:"topicName"`
+		TopicCode    string `json:"topicCode"`
+		TopicId      int    `json:"topicId"`
+		Contact      string `json:"contact"`
+		Introduction string `json:"introduction"`
+		CreateTime   string `json:"createTime"`
+	} `json:"data"`
+}
+
+type TopicAddReq struct {
+	TopicCode      string `json:"topicCode"`      // 群组编码
+	TopicName      string `json:"topicName"`      // 群组名称
+	Contact        string `json:"contact"`        // 联系方式
+	Introduction   string `json:"introduction"`   // 群组简介
+	ReceiptMessage string `json:"receiptMessage"` // 加入后回复内容
+}
+
+type TopicAddResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data int    `json:"data"` // 新建群组的群组编号
+}
+
+type QrCodeResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		QrCodeImgUrl string `json:"qrCodeImgUrl"` // 群组二维码图片路径
+		Forever      int    `json:"forever"`      // 二维码类型；0-临时二维码，1-永久二维码
+	} `json:"data"`
+}
+
+type TopicUserListReq struct {
+	PageReq
+	Params struct {
+		TopicId int `json:"topicId"`
+	} `json:"params"`
+}
+
+type TopicUserListResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		Pager
+		List []struct {
+			Id          int    `json:"id"`          // 用户编号；可用于删除用户
+			NickName    string `json:"nickName"`    // 昵称
+			OpenId      string `json:"openId"`      // 用户微信openId
+			HeadImgUrl  string `json:"headImgUrl"`  // 头像url地址
+			UserSex     int    `json:"userSex"`     // 性别；0-未设置，1-男，2-女
+			HavePhone   int    `json:"havePhone"`   // 是否绑定手机；0-未绑定，1-已绑定
+			IsFollow    int    `json:"isFollow"`    // 是否关注微信公众号；0-未关注，1-已关注
+			EmailStatus int    `json:"emailStatus"` // 邮箱验证状态；0-未验证，1-待验证，2-已验证
+		} `json:"list"`
+	} `json:"data"`
+}
+
 type WebhookListResp struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 	Data struct {
-		PageNum  int `json:"pageNum"`
-		PageSize int `json:"pageSize"`
-		Total    int `json:"total"`
-		Pages    int `json:"pages"`
-		List     []struct {
-			Id          int    `json:"id"`
-			WebhookCode string `json:"webhookCode"`
-			WebhookName string `json:"webhookName"`
-			WebhookType int    `json:"webhookType"`
-			WebhookUrl  string `json:"webhookUrl"`
-			CreateTime  string `json:"createTime"`
-		} `json:"list"`
+		PageNum  int           `json:"pageNum"`
+		PageSize int           `json:"pageSize"`
+		Total    int           `json:"total"`
+		Pages    int           `json:"pages"`
+		List     []WebhookData `json:"list"`
+	} `json:"data"`
+}
+
+type WebhookResp struct {
+	Code int         `json:"code"`
+	Msg  string      `json:"msg"`
+	Data WebhookData `json:"data"`
+}
+
+type WebhookData struct {
+	Id          int    `json:"id"`
+	WebhookCode string `json:"webhookCode"` // 编码
+	WebhookName string `json:"webhookName"` // 名称
+	WebhookType int    `json:"webhookType"` // 类型；1-企业微信，2-钉钉，3-飞书，4-server酱
+	WebhookUrl  string `json:"webhookUrl"`  // 调用的url地址
+	CreateTime  string `json:"createTime"`
+}
+
+type WebhookReq struct {
+	WebhookCode string `json:"webhookCode"` // 编码
+	WebhookName string `json:"webhookName"` // 名称
+	WebhookType int    `json:"webhookType"` // 类型；1-企业微信，2-钉钉，3-飞书，4-server酱
+	WebhookUrl  string `json:"webhookUrl"`  // 调用的url地址
+}
+
+type UserSetting struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		DefaultChannel    string `json:"defaultChannel"`    // 默认渠道编码
+		DefaultChannelTxt string `json:"defaultChannelTxt"` // 默认渠道名称
+		DefaultWebhook    string `json:"defaultWebhook"`    // webhook 参数
+		SendLimit         int    `json:"sendLimit"`         // 发送限制；0-无限制，1-禁止所有渠道发送，2-限制微信渠道，3-限制邮件渠道
+		RecevieLimit      int    `json:"recevieLimit"`      // 接收限制；0-接收全部，1-不接收消息
+
 	} `json:"data"`
 }

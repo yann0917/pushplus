@@ -28,9 +28,9 @@ const (
 	ExitTopicURL       = "/api/open/topic/exitTopic?topicId="
 	TopicDetailURL     = "/api/open/topic/detail?topicId="
 	JoinTopicDetailURL = "/api/open/topic/joinTopicDetail?topicId="
-	TopicQRCode        = "/api/open/topic/qrCode?topicId=1&forever=0" // 二维码类型；0-临时二维码，1-永久二维码
+	TopicQRCode        = "/api/open/topic/qrCode?topicId=" // 二维码类型；0-临时二维码，1-永久二维码
 
-	SubscriberListUR   = "/api/open/topicUser/subscriberList"
+	SubscriberListURL  = "/api/open/topicUser/subscriberList"
 	DeleteTopicUserURL = "/api/open/topicUser/deleteTopicUser?topicRelationId="
 
 	WebhookListURL   = "/api/open/webhook/list"
@@ -96,6 +96,9 @@ func Template(tpl string) Option {
 
 func DebugLog(isDebug bool) Option {
 	return func(client *Client) {
+		if isDebug {
+			client.Req = client.Req.EnableDumpAllAsync()
+		}
 		client.DebugLog = isDebug
 	}
 }
@@ -136,7 +139,6 @@ func (da DefaultAuthorizer) Authorize(client *Client) (err error) {
 	}
 
 	var authResp AuthResp
-
 	err = resp.UnmarshalJson(&authResp)
 	if err != nil {
 		return

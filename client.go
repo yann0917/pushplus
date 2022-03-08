@@ -136,7 +136,6 @@ func (da DefaultAuthorizer) Authorize(client *Client) (err error) {
 	}
 
 	var authResp AuthResp
-
 	err = resp.UnmarshalJson(&authResp)
 	if err != nil {
 		return

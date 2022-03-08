@@ -85,7 +85,7 @@ func (client *Client) GetUserInfo() (result UserInfo, err error) {
 }
 
 func (client *Client) GetUserLimitTime() (result UserLimitTimeResp, err error) {
-	err = client.EnableDebugLog().Auth()
+	err = client.Auth()
 	if err != nil {
 		return
 	}

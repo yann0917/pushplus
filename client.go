@@ -168,11 +168,3 @@ func (client *Client) Auth() error {
 	client.Req = client.Req.SetCommonHeader("access-key", client.AccessKey)
 	return nil
 }
-
-// EnableDebugLog 开启日志
-func (client *Client) EnableDebugLog() *Client {
-	if client.DebugLog {
-		client.Req = client.Req.EnableDumpAllAsync()
-	}
-	return client
-}

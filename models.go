@@ -10,12 +10,19 @@ type SendMsgReq struct {
 	Webhook     string `json:"webhook,omitempty"`
 	CallbackUrl string `json:"callback_url,omitempty"` // 发送结果回调地址
 	Timestamp   string `json:"timestamp,omitempty"`    // 毫秒时间戳。格式如：1632993318000。服务器时间戳大于此时间戳，则消息不会发送
+	To          string `json:"to,omitempty"`           // 好友令牌，微信公众号渠道填写好友令牌，企业微信渠道填写企业微信用户id
 }
 
 type Resp struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 	Data string `json:"data"`
+}
+
+type IntResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data int    `json:"data"`
 }
 
 type SendMsgCallbackResp struct {
@@ -102,6 +109,16 @@ type UserLimitTimeResp struct {
 	} `json:"data"`
 }
 
+type UserSendCountResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		WechatSendCount  int `json:"wechatSendCount"`  // 微信公众号渠道请求次数
+		CpSendCount      int `json:"cpSendCount"`      // 企业微信应用渠道请求次数
+		WebhookSendCount int `json:"webhookSendCount"` // webhook渠道请求次数
+		MailSendCount    int `json:"mailSendCount"`    // 邮件渠道请求次数
+	} `json:"data"`
+}
 type TopicListReq struct {
 	PageReq
 	Params struct {
@@ -204,11 +221,8 @@ type WebhookListResp struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 	Data struct {
-		PageNum  int           `json:"pageNum"`
-		PageSize int           `json:"pageSize"`
-		Total    int           `json:"total"`
-		Pages    int           `json:"pages"`
-		List     []WebhookData `json:"list"`
+		Pager
+		List []WebhookData `json:"list"`
 	} `json:"data"`
 }
 
@@ -234,6 +248,73 @@ type WebhookReq struct {
 	WebhookUrl  string `json:"webhookUrl"`  // 调用的url地址
 }
 
+type MpListResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		Pager
+		List []MpData `json:"list"`
+	} `json:"data"`
+}
+
+type MpData struct {
+	Id                 int    `json:"id"`                 // 微信公众号编号
+	NickName           string `json:"nickName"`           // 微信公众号名称
+	HeadImg            string `json:"headImg"`            // 微信公众号头像
+	PrincipalName      string `json:"principalName"`      // 公众号的主体名称
+	AuthorizationAppid string `json:"authorizationAppid"` // 授权方appid
+	FuncInfo           string `json:"funcInfo"`           // 权限集列表
+	ServiceType        int    `json:"serviceType"`        // 授权方公众号类型，0 代表订阅号，1 代表由历史老账号升级后的订阅号，2 代表服务号
+	VerifyType         int    `json:"verifyType"`         // 授权方认证类型，-1 代表未认证，0 代表微信认证
+	Alias              string `json:"alias"`              // 公众号所设置的微信号
+	UpdateTime         string `json:"updateTime"`
+}
+
+type CpListResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		Pager
+		List []CpData `json:"list"`
+	} `json:"data"`
+}
+
+type CpData struct {
+	Id     int    `json:"id"`     // 企业微信应用编号
+	CpName string `json:"cpName"` // 企业微信应用名称
+	CpCode string `json:"cpCode"` // 企业微信应用编码
+}
+
+type MailListResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		Pager
+		List []struct {
+			Id       int    `json:"id"`
+			MailName string `json:"mailName"`
+			MailCode string `json:"mailCode"`
+		} `json:"list"`
+	} `json:"data"`
+}
+
+type MailDetailResp struct {
+	Code int      `json:"code"`
+	Msg  string   `json:"msg"`
+	Data MailData `json:"data"`
+}
+type MailData struct {
+	Id         int    `json:"id"`       // 邮箱编号
+	MailName   string `json:"mailName"` // 邮箱名称
+	MailCode   string `json:"mailCode"` // 邮箱编码
+	Account    string `json:"account,omitempty"`
+	Password   string `json:"password,omitempty"`
+	SmtpServer string `json:"smtpServer,omitempty"`
+	SmtpSsl    int    `json:"smtpSsl,omitempty"`
+	SmtpPort   int    `json:"smtpPort,omitempty"`
+	CreateTime string `json:"createTime,omitempty"`
+}
+
 type UserSetting struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
@@ -245,4 +326,39 @@ type UserSetting struct {
 		RecevieLimit      int    `json:"recevieLimit"`      // 接收限制；0-接收全部，1-不接收消息
 
 	} `json:"data"`
+}
+
+type FriendQRCode struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		QrCodeImgUrl string `json:"qrCodeImgUrl"`
+	} `json:"data"`
+}
+
+type FriendListResp struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data struct {
+		Pager
+		List []FriendData `json:"list"`
+	} `json:"data"`
+}
+
+type FriendData struct {
+	Id          int    `json:"id"`          // 好友编号
+	FriendId    int    `json:"friendId"`    // 好友id
+	Token       string `json:"token"`       // 好友令牌；发送好友消息使用
+	HeadImgUrl  string `json:"headImgUrl"`  // 好友头像
+	NickName    string `json:"nickName"`    // 好友昵称
+	EmailStatus int    `json:"emailStatus"` // 邮箱验证状态；0-未验证，1-待验证，2-已验证
+	HavePhone   int    `json:"havePhone"`   // 是否绑定手机；0-未绑定，1-已绑定
+	IsFollow    int    `json:"isFollow"`    // 是否关注微信公众号；0-未关注，1-已关注
+	Remark      string `json:"remark"`      // 备注
+	CreateTime  string `json:"createTime"`  // 创建日期
+}
+
+type EditFriendReq struct {
+	Id     int    `json:"id"`     // 好友编号
+	Remark string `json:"remark"` // 备注
 }

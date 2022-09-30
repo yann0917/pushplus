@@ -103,6 +103,25 @@ func (client *Client) GetUserLimitTime() (result UserLimitTimeResp, err error) {
 	return
 }
 
+func (client *Client) UserSendCount() (result UserLimitTimeResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+
+	resp, err := client.Req.R().
+		Get(UserSendCount)
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&result)
+	if err != nil {
+		return
+	}
+	return
+}
+
 // TopicList  群组列表
 // page 当前所在分页数, pageSize 每页大小最大值为50, topicType 群组类型: 0-我创建的，1-我加入的
 func (client *Client) TopicList(page, pageSize, topicType int) (list TopicListResp, err error) {
@@ -368,6 +387,105 @@ func (client *Client) WebhookDetail(id int) (detail WebhookResp, err error) {
 	return
 }
 
+// MpList  获取微信公众号渠道列表
+// page 当前所在分页数, pageSize 每页大小最大值为50
+func (client *Client) MpList(page, pageSize int) (list MpListResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+	param := PageReq{
+		Current:  page,
+		PageSize: pageSize,
+	}
+	resp, err := client.Req.R().
+		SetBodyJsonMarshal(param).
+		Post(WebhookMpList)
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&list)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// CpList  获取企业微信渠道列表
+// page 当前所在分页数, pageSize 每页大小最大值为50
+func (client *Client) CpList(page, pageSize int) (list CpListResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+	param := PageReq{
+		Current:  page,
+		PageSize: pageSize,
+	}
+	resp, err := client.Req.R().
+		SetBodyJsonMarshal(param).
+		Post(WebhookCpList)
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&list)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// MailList  获取邮箱渠道列表
+// page 当前所在分页数, pageSize 每页大小最大值为50
+func (client *Client) MailList(page, pageSize int) (list MailListResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+	param := PageReq{
+		Current:  page,
+		PageSize: pageSize,
+	}
+	resp, err := client.Req.R().
+		SetBodyJsonMarshal(param).
+		Post(WebhookMailList)
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&list)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// MailDetail  获取邮箱渠道详情
+// mailID 邮箱编号
+func (client *Client) MailDetail(mailID int) (detail MailDetailResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+
+	resp, err := client.Req.R().
+		Get(WebhookMailDetail + Int2String(mailID))
+	if err != nil {
+		return
+	}
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&detail)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (client *Client) GetUserSettings() (detail UserSetting, err error) {
 	err = client.Auth()
 	if err != nil {
@@ -428,6 +546,139 @@ func (client *Client) ChangeReceiveLimit(limit int) (detail Resp, err error) {
 
 	resp, err := client.Req.R().
 		Get(ChangeReceiveLimitURL + Int2String(limit))
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&detail)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// ChangeIsSend 开启/关闭发送消息功能
+// isSend 发送消息功能；0-禁用，1-启用
+func (client *Client) ChangeIsSend(isSend int) (detail IntResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+
+	resp, err := client.Req.R().
+		Get(ChangeIsSend + Int2String(isSend))
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&detail)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// ChangeOpenMessageType 修改打开消息方式
+// msgType 消息打开类型；0:H5，1:小程序
+func (client *Client) ChangeOpenMessageType(msgType int) (detail IntResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+
+	resp, err := client.Req.R().
+		Get(changeOpenMessageType + Int2String(msgType))
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&detail)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// FriendGetQRCode 获取个人二维码
+func (client *Client) FriendGetQRCode() (detail FriendQRCode, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+
+	resp, err := client.Req.R().
+		Get(FriendGetQrCode)
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&detail)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// FriendList  获取好友列表
+// page 当前所在分页数, pageSize 每页大小最大值为50
+func (client *Client) FriendList(page, pageSize int) (list FriendListResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+	param := PageReq{
+		Current:  page,
+		PageSize: pageSize,
+	}
+	resp, err := client.Req.R().
+		SetBodyJsonMarshal(param).
+		Post(FriendList)
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&list)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// FriendDel 删除好友
+// id 好友id
+func (client *Client) FriendDel(id int) (detail IntResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+
+	resp, err := client.Req.R().
+		Get(DeleteFriend + Int2String(id))
+	if err != nil {
+		return
+	}
+
+	err = resp.UnmarshalJson(&detail)
+	if err != nil {
+		return
+	}
+	return
+}
+
+// FriendEditRemark  修改好友备注
+// id 好友编号, remark 好友备注
+func (client *Client) FriendEditRemark(id int, remark string) (detail IntResp, err error) {
+	err = client.Auth()
+	if err != nil {
+		return
+	}
+	param := FriendData{
+		Id:     id,
+		Remark: remark,
+	}
+	resp, err := client.Req.R().
+		SetBodyJsonMarshal(param).
+		Post(FriendEditRemark)
 	if err != nil {
 		return
 	}

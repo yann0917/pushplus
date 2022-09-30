@@ -8,8 +8,8 @@ import (
 var HttpClient *Client
 
 func TestMain(m *testing.M) {
-	token := "0787bab863f84f02ab3c5a1510336e66"
-	key := "5b2e1c522248443d85b3281de67eeeed"
+	token := "0787bab863f84f02ab3c5a1510336e6"
+	key := "5b2e1c522248443d85b3281de67eeee"
 	HttpClient = NewClient(token, SecretKey(key), DebugLog(true))
 	code := m.Run()
 	os.Exit(code)

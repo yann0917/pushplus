@@ -44,6 +44,14 @@ func TestGetUserLimitTime(t *testing.T) {
 	t.Log(result)
 }
 
+func TestUserSendCount(t *testing.T) {
+	result, err := HttpClient.UserSendCount()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
 func TestTopicList(t *testing.T) {
 	result, err := HttpClient.TopicList(1, 20, 0)
 	if err != nil {
@@ -161,6 +169,54 @@ func TestClient_WebhookDetail(t *testing.T) {
 	t.Log(result)
 }
 
+func TestClient_MpList(t *testing.T) {
+	result, err := HttpClient.MpList(1, 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
+func TestClient_CList(t *testing.T) {
+	result, err := HttpClient.CpList(1, 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
+func TestClient_MailList(t *testing.T) {
+	result, err := HttpClient.MailList(1, 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
+func TestClient_MailDetail(t *testing.T) {
+	result, err := HttpClient.MailDetail(100)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
+func TestClient_ChangeIsSend(t *testing.T) {
+	result, err := HttpClient.ChangeIsSend(1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
+func TestClient_ChangeOpenMessageType(t *testing.T) {
+	result, err := HttpClient.ChangeOpenMessageType(1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
 func TestClient_GetUserSettings(t *testing.T) {
 	result, err := HttpClient.GetUserSettings()
 	if err != nil {
@@ -184,4 +240,28 @@ func TestClient_ChangeReceiveLimit(t *testing.T) {
 	}
 	t.Log(result)
 
+}
+
+func TestClient_FriendGetQRCode(t *testing.T) {
+	result, err := HttpClient.FriendGetQRCode()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
+func TestClient_FriendList(t *testing.T) {
+	result, err := HttpClient.FriendList(1, 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
+}
+
+func TestClient_FriendDel(t *testing.T) {
+	result, err := HttpClient.FriendDel(1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(result)
 }

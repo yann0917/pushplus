@@ -22,6 +22,7 @@ const (
 	UserTokenURL     = "/api/open/user/token"
 	UserInfoURL      = "/api/open/user/myInfo"
 	UserLimitTimeURL = "/api/open/user/userLimitTime"
+	UserSendCount    = "/api/open/user/sendCount"
 
 	TopicAddURL        = "/api/open/topic/add"
 	TopicListURL       = "/api/open/topic/list"
@@ -33,14 +34,25 @@ const (
 	SubscriberListURL  = "/api/open/topicUser/subscriberList"
 	DeleteTopicUserURL = "/api/open/topicUser/deleteTopicUser?topicRelationId="
 
-	WebhookListURL   = "/api/open/webhook/list"
-	WebhookDetailURL = "/api/open/webhook/detail?webhookId="
-	WebhookAddURL    = "/api/open/webhook/add"
-	WebhookEditURL   = "/api/open/webhook/edit"
+	WebhookListURL    = "/api/open/webhook/list"
+	WebhookDetailURL  = "/api/open/webhook/detail?webhookId="
+	WebhookAddURL     = "/api/open/webhook/add"
+	WebhookEditURL    = "/api/open/webhook/edit"
+	WebhookMpList     = "/api/open/mp/list"
+	WebhookCpList     = "/api/open/cp/list"
+	WebhookMailList   = "/api/open/mail/list"
+	WebhookMailDetail = "/api/open/mail/detail?mailId="
 
 	GetUserSettingsURL      = "/api/open/setting/getUserSettings"
 	ChangeDefaultChannelURL = "/api/open/setting/changeDefaultChannel"
 	ChangeReceiveLimitURL   = "/api/open/setting/changeRecevieLimit?recevieLimit="
+	ChangeIsSend            = "/api/open/setting/changeIsSend?isSend="
+	changeOpenMessageType   = "/api/open/setting/changeOpenMessageType?openMessageType="
+
+	FriendGetQrCode  = "/api/open/friend/getQrCode"
+	FriendList       = "/api/open/friend/list"
+	DeleteFriend     = "/api/open/friend/deleteFriend?friendId="
+	FriendEditRemark = "/api/open/friend/editRemark"
 )
 
 type Authorizer interface {
@@ -56,10 +68,12 @@ type Client struct {
 	Authorizer Authorizer
 	Token      string
 	SecretKey  string
+	Topic      string
 	Template   string
 	Channel    string
 	Webhook    string
 	Callback   string
+	To         string
 	DebugLog   bool
 }
 
@@ -85,6 +99,12 @@ func NewClient(token string, options ...Option) *Client {
 func SecretKey(secretKey string) Option {
 	return func(client *Client) {
 		client.SecretKey = secretKey
+	}
+}
+
+func Topic(topic string) Option {
+	return func(client *Client) {
+		client.Topic = topic
 	}
 }
 
@@ -118,6 +138,12 @@ func Webhook(hook string) Option {
 func Callback(url string) Option {
 	return func(client *Client) {
 		client.Callback = url
+	}
+}
+
+func To(to string) Option {
+	return func(client *Client) {
+		client.To = to
 	}
 }
 
